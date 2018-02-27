@@ -54,20 +54,12 @@ class Controller_Canciones extends Controller_Rest
                 {
                     $json = $this->response(array(
                         'code' => 400,
-                        'message' => 'Error en las credenciales, prueba otra vez',
+                        'message' => 'Error en las credenciales',
                         'data' => []
                     ));
                     return $json;
                 }
-                /*if (strlen($_POST['password']) < 6 || strlen($_POST['password']) >12){
-                    $json = $this->response(array(
-                        'code' => 400,
-                        'message' => 'Contraseña: entre 6 y 12 caracteres',
-                        'data' => []
-                    ));
-                    return $json;
-                }*/
-              
+                
                 $input = $_POST;
                 
                     $canciones = new Model_Canciones();
@@ -306,9 +298,7 @@ class Controller_Canciones extends Controller_Rest
             $añadir->id_lista = $lista->id;
             $añadir->id_cancion = $cancion;
             $añadir->save();
-                # code...
-            
-            # code...
+
         }
         
        
@@ -318,6 +308,6 @@ class Controller_Canciones extends Controller_Rest
         
         
     }
-                                    //Mostrar usuarios
+
     
 }

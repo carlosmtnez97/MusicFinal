@@ -19,7 +19,7 @@ class Controller_Usuarios extends Controller_Rest
                 {
                     $json = $this->response(array(
                     'code' => 400,
-                    'message' => 'No se puede usar la app hasta que haya minimo un administrador',
+                    'message' => 'No existe ningun administrador',
                     'data' => []
                 ));
                 return $json;
@@ -30,32 +30,24 @@ class Controller_Usuarios extends Controller_Rest
                     {
                         $json = $this->response(array(
                             'code' => 400,
-                            'message' => 'Error en las credenciales, prueba otra vez',
+                            'message' => 'Error en las credenciales',
                             'data' => []
                         ));
                         return $json;
                     }
-                    /*if (strlen($_POST['password']) < 6 || strlen($_POST['password']) >12){
-                        $json = $this->response(array(
-                            'code' => 400,
-                            'message' => 'Contraseña: entre 6 y 12 caracteres',
-                            'data' => []
-                        ));
-                        return $json;
-                    }*/
+                    
                   
                     $input = $_POST;
                     if ($input['password'] != $input['repeatPassword'])
                     {
                         $json = $this->response(array(
                             'code' => 400,
-                            'message' => 'password y repeatPassword han de coincidir',
+                            'message' => 'Las contraseñas deben de coincidir',
                             'data' => []
                         ));
                         
                     }
-                    /*$password = ['password' => $input['password']];
-                    $dataJwtPassword = JWT::decode($password, $this->key);*/
+                    
                     
                     
                     else
@@ -76,7 +68,7 @@ class Controller_Usuarios extends Controller_Rest
                         {
                             $json = $this->response(array(
                                 'code' => 400,
-                                'message' => 'Se necesita introducir todos los parametros',
+                                'message' => 'Es necesario introducir todos los parámetros',
                                 'data' => []
                             ));
                         }
@@ -115,7 +107,6 @@ class Controller_Usuarios extends Controller_Rest
                     'code' => 500,
                     'message' => $e->getMessage(),
                     'data' => []
-                //'message' => $e->getMessage(),
                 ));
                 return $json;
             }
@@ -123,7 +114,6 @@ class Controller_Usuarios extends Controller_Rest
             {
                 $json = $this->response(array(
                     'code' => 500,
-               // 'message' => $e->getCode()
                     'message' => $e->getMessage(),
                     'data' => []
                 ));
@@ -140,35 +130,23 @@ class Controller_Usuarios extends Controller_Rest
                     {
                         $json = $this->response(array(
                             'code' => 400,
-                            'message' => 'Error en las credenciales, prueba otra vez',
+                            'message' => 'Error en las credenciales',
                             'data' => []
                         ));
                         return $json;
                     }
-                    /*if (strlen($_POST['password']) < 6 || strlen($_POST['password']) >12){
-                        $json = $this->response(array(
-                            'code' => 400,
-                            'message' => 'Contraseña: entre 6 y 12 caracteres',
-                            'data' => []
-                        ));
-                        return $json;
-                    }*/
+                    
                   
                     $input = $_POST;
                     if ($input['password'] != $input['repeatPassword'])
                     {
                         $json = $this->response(array(
                             'code' => 400,
-                            'message' => 'password y repeatPassword han de coincidir',
+                            'message' => 'Las contraseñas deben coincidir',
                             'data' => []
                         ));
                         
-                    }
-                    /*$password = ['password' => $input['password']];
-                    $dataJwtPassword = JWT::decode($password, $this->key);*/
-                    
-                    
-                    else
+                    }else
                     {
                         $user = new Model_Usuarios();
                         $user->username = 'admin';
@@ -288,12 +266,14 @@ class Controller_Usuarios extends Controller_Rest
        }
         $json = $this->response(array(
             'code' => 200,
-            'message' => 'Esta es la lista de usuarios',
+            'message' => 'Lista de usuarios mostrada',
             'data' => $users
         ));
         return $json;
     	//return $this->response(Arr::reindex($users));
     }
+
+
     public function get_usersCercanos()
     {
         try
@@ -399,25 +379,11 @@ class Controller_Usuarios extends Controller_Rest
             'data' => $salida
         ));
         return $json;
-        //return $this->response(Arr::reindex($users));
+        
     }
-    /*public function get_user()
-    {
-            $header = apache_request_headers();
-            if (isset($header['Authorization'])) 
-                {
-                    $token = $header['Authorization'];
-                    $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
-                }
-        $user = Model_Users::find($dataJwtUser->id);
-        $json = $this->response(array(
-            'code' => 200,
-            'message' => 'Este es el usuario',
-            'data' => $user
-        ));
-        return $json;
-        //return $this->response(Arr::reindex($users));
-    }*/
+
+
+
     private function privacityDefault($id)
     {
        
@@ -454,7 +420,7 @@ class Controller_Usuarios extends Controller_Rest
         $ultimasEscuchadas= new Model_Listas();
         $ultimasEscuchadas->id_usuario = $id;
         $ultimasEscuchadas->editable = 2;
-        $ultimasEscuchadas->titulo = 'Ultimas escuchadas';
+        $ultimasEscuchadas->titulo = 'Escuchadas recientemente';
         
         $ultimasEscuchadas->save();
        
@@ -468,7 +434,7 @@ class Controller_Usuarios extends Controller_Rest
         $user->delete();
         $json = $this->response(array(
             'code' => 200,
-            'message' => 'Usuario borrado',
+            'message' => 'Usuario ha sido borrado',
             'name' => $userName
         ));
             return $json;
@@ -482,14 +448,11 @@ class Controller_Usuarios extends Controller_Rest
             {
                 return $this->response(array(
                     'code' => 400,
-                    'message' => 'Hay campos vacios',
+                    'message' => 'No puede haber campos vacíos',
                     'data' => []
                 ));
             }
             $input = $_GET;
-            //$password = ['password' => $users->Password];
-          
-           // $passwordDecode = JWT::decode($password, $this->key, array('HS256'));
             
             $users = Model_Usuarios::find('all', array(
                         'where' => array(
@@ -522,7 +485,7 @@ class Controller_Usuarios extends Controller_Rest
             {
                 return $this->response(array(
                     'code' => 400,
-                    'message' => 'Usuario y password no coinciden o son incorrectos',
+                    'message' => 'Usuario y/o contraseña no coinciden o son incorrectos',
                     'data' => []
                     ));
             }
@@ -562,7 +525,7 @@ class Controller_Usuarios extends Controller_Rest
             {
                 $json = $this->response(array(
                     'code' => 400,
-                    'message' =>  'Parametro email no introducido',
+                    'message' =>  'email no introducido',
                     'data' => []
                 ));
                 return $json;
@@ -586,7 +549,7 @@ class Controller_Usuarios extends Controller_Rest
             {
                 return $this->response(array(
                     'code' => 400,
-                    'message' => 'El email introducido no existe',
+                    'message' => 'email no existe',
                     'data' => []
                     ));
             }
@@ -599,7 +562,7 @@ class Controller_Usuarios extends Controller_Rest
                 $token = JWT::encode($tokendata, $this->key);
                 $json = $this->response(array(
                     'code' => 200,
-                    'message' => 'Email validado',
+                    'message' => 'Contraseña recuperada',
                     'data' => $token
                 ));
                 return $json;
@@ -637,7 +600,7 @@ class Controller_Usuarios extends Controller_Rest
             if (($_POST['password']) != ($_POST['repeatPassword'])){
                     $json = $this->response(array(
                         'code' => 400,
-                        'message' => 'Password y repeatPassword han de ser iguales',
+                        'message' => 'Password y repeatPassword deben ser iguales',
                         'data' => []
                     ));
                     return $json;
@@ -650,7 +613,7 @@ class Controller_Usuarios extends Controller_Rest
                                 
                 $json = $this->response(array(
                     'code' => 200,
-                    'message' =>  'Password cambiada correctamente',
+                    'message' =>  'Contraseña cambiada correctamente',
                     'data' => []
                 ));
                 return $json;
@@ -756,7 +719,7 @@ class Controller_Usuarios extends Controller_Rest
                                 
                     $json = $this->response(array(
                         'code' => 200,
-                        'message' =>  'Cambios realizados correctamente',
+                        'message' =>  'Usuario modificado correctamente',
                         'data' => $users
                      ));
                     return $json;
@@ -830,51 +793,4 @@ class Controller_Usuarios extends Controller_Rest
         }
     }
    
-/*
-        function decodeToken()
-    {
-        $jwt = apache_request_headers()['Authorization'];
-        $token = JWT::decode($jwt, $this->key , array('HS256'));
-        return $token;
-    }
-    function userNotRegistered($email)
-    {
-        $users = Model_Users::find('first', array(
-            'where' => array(
-                array('email', $email),
-                array('is_registered', 0)
-                )
-            )); 
-        if($users != null){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
-    function validateToken($jwt)
-    {
-        $token = JWT::decode($jwt, $this->key, array('HS256'));
-        $email = $token->data->email;
-        $password = $token->data->password;
-        $id = $token->data->id;
-        $users = Model_Users::find('all', array(
-            'where' => array(
-                array('email', $email),
-                array('password', $password),
-                array('id',$id)
-                )
-            ));
-        if($users != null){
-            return true;
-        }else{
-            return false;
-        }
-    }
-*/
-    
-       /*public function post_editProfile()
-        {
-    //nombre email y foto
-        }*/
 }  

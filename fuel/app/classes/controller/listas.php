@@ -43,7 +43,7 @@ class Controller_Listas extends Controller_Rest
             {
                 $json = $this->response(array(
                     'code' => 400,
-                    'message' => 'Solo los usuario pueden crear listas modificables',
+                    'message' => 'Solo los usuario pueden crear listas ',
                     'data' => []
                 ));
                 return $json;
@@ -54,19 +54,12 @@ class Controller_Listas extends Controller_Rest
                 {
                     $json = $this->response(array(
                         'code' => 400,
-                        'message' => 'Error en las credenciales, prueba otra vez',
+                        'message' => 'Error en las credenciales',
                         'data' => []
                     ));
                     return $json;
                 }
-                /*if (strlen($_POST['password']) < 6 || strlen($_POST['password']) >12){
-                    $json = $this->response(array(
-                        'code' => 400,
-                        'message' => 'Contraseña: entre 6 y 12 caracteres',
-                        'data' => []
-                    ));
-                    return $json;
-                }*/
+                
               
                 $input = $_POST;
                 
@@ -94,7 +87,7 @@ class Controller_Listas extends Controller_Rest
                     {
                         $json = $this->response(array(
                             'code' => 400,
-                            'message' => 'No se pueden sobreescribir estos nombres',
+                            'message' => 'No se pueden sobreescribir los nombres',
                             'data' => []
                         ));
                     }
@@ -103,7 +96,7 @@ class Controller_Listas extends Controller_Rest
                         
                         $json = $this->response(array(
                             'code' => 200,
-                            'message' => 'Cancion creada correctamente',
+                            'message' => 'Lista creada correctamente',
                             'data' => $listas
                         ));
                         return $json;
@@ -204,7 +197,7 @@ class Controller_Listas extends Controller_Rest
        }
         $json = $this->response(array(
             'code' => 200,
-            'message' => 'Conjunto de listas',
+            'message' => 'Listas mostradas',
             'data' => $nomlista
         ));
         return $json;
@@ -242,7 +235,7 @@ class Controller_Listas extends Controller_Rest
                 {
                     $json = $this->response(array(
                         'code' => 400,
-                        'message' => 'Error en las credenciales, prueba otra vez',
+                        'message' => 'Error en las credenciales',
                         'data' => []
                     ));
                     return $json;
@@ -324,7 +317,7 @@ class Controller_Listas extends Controller_Rest
                 {
                     $json = $this->response(array(
                         'code' => 400,
-                        'message' => 'Error en las credenciales, prueba otra vez',
+                        'message' => 'Error en las credenciales',
                         'data' => []
                     ));
                     return $json;
