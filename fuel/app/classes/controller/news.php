@@ -2,16 +2,15 @@
 
 use Firebase\JWT\JWT;
 
-class Controller_Roles extends Controller_Rest
+class Controller_News extends Controller_Rest
 {
 
 	private $key = "dejr334irj3irji3r4j3rji3jiSj3jri";
-
 	public function post_create()
     {
     	try {
             
-            if ( empty($_POST['type']))
+            if ( empty($_POST['title']), empty($_POST['description']))
             {
                 $json = $this->response(array(
                     'code' => 400,
@@ -19,33 +18,29 @@ class Controller_Roles extends Controller_Rest
                 ));
                 return $json;            }
 
-            $role = $_POST['type'];
+            $new = $_POST['title'];
+            $new = $_POST['description'];
 
-            if($this->isRoleCreated($role))
+            if($this->isNewCreated($new))
             {
                 $json = $this->response(array(
                     'code' => 400,
-                    'message' => 'El rol existe',
+                    'message' => 'La noticia ya existe',
                     'data' => []
                 ));
                 return $json;
             }
 
             $input = $_POST;
-            $role = new Model_Roles();
-            $role->type = $input['type'];
-            $role->save();
-            
-            $dataToken = array(
-                        "type" => $role,
-                        
-                    );
-
-                    $token = JWT::encode($dataToken, $this->$key);
-                    
+            $new = new Model_News();
+            $new->title = $input['title'];
+            $new->description = $input['description'];
+            $new->id_user = 1;
+            $new->save();
+    
             $json = $this->response(array(
                 'code' => 200,
-                'message' => 'Rol creado',
+                'message' => 'Noticia creada',
                 'data' => []
             ));
             return $json;
@@ -59,23 +54,23 @@ class Controller_Roles extends Controller_Rest
             return $json;
         }
     }
-     public function get_roles()
+     public function get_news()
     {
         /*return $this->respuesta(500, 'trace');
         exit;*/
-        $roles = Model_Roles::find('all');
-        return $this->response(Arr::reindex($roles));
+        $news = Model_Lists::find('all');
+        return $this->response(Arr::reindex($lists));
     }
 
-        public function isRolesCreated($type)
+        public function isNewCreated($title)
     {
-        $roles = Model_Roles::find('all', array(
+        $news = Model_Lists::find('all', array(
             'where' => array(
-                array('type', $type)
+                array('title', $title)
             )
         ));
         
-        if(count($type) < 1)  {
+        if(count($news) < 1)  {
             return false;
         }
         else 

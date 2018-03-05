@@ -2,16 +2,15 @@
 
 use Firebase\JWT\JWT;
 
-class Controller_Roles extends Controller_Rest
+class Controller_Lists extends Controller_Rest
 {
 
 	private $key = "dejr334irj3irji3r4j3rji3jiSj3jri";
-
 	public function post_create()
     {
     	try {
             
-            if ( empty($_POST['type']))
+            if ( empty($_POST['title']))
             {
                 $json = $this->response(array(
                     'code' => 400,
@@ -19,33 +18,35 @@ class Controller_Roles extends Controller_Rest
                 ));
                 return $json;            }
 
-            $role = $_POST['type'];
+            $list = $_POST['title'];
 
-            if($this->isRoleCreated($role))
+            if($this->isListCreated($list))
             {
                 $json = $this->response(array(
                     'code' => 400,
-                    'message' => 'El rol existe',
+                    'message' => 'Lista ya existe',
                     'data' => []
                 ));
                 return $json;
             }
 
             $input = $_POST;
-            $role = new Model_Roles();
-            $role->type = $input['type'];
-            $role->save();
-            
+            $list = new Model_Lists();
+            $list->title = $input['title'];
+            $list->editable = 1;
+            $list->id_user = 1;
+            $list->save();
+            /*
             $dataToken = array(
-                        "type" => $role,
+                        "title" => $list,
                         
                     );
 
                     $token = JWT::encode($dataToken, $this->$key);
-                    
+                    */
             $json = $this->response(array(
                 'code' => 200,
-                'message' => 'Rol creado',
+                'message' => 'Lista creada',
                 'data' => []
             ));
             return $json;
@@ -59,23 +60,23 @@ class Controller_Roles extends Controller_Rest
             return $json;
         }
     }
-     public function get_roles()
+     public function get_lists()
     {
         /*return $this->respuesta(500, 'trace');
         exit;*/
-        $roles = Model_Roles::find('all');
-        return $this->response(Arr::reindex($roles));
+        $lists = Model_Lists::find('all');
+        return $this->response(Arr::reindex($lists));
     }
 
-        public function isRolesCreated($type)
+        public function isListCreated($title)
     {
-        $roles = Model_Roles::find('all', array(
+        $lists = Model_Lists::find('all', array(
             'where' => array(
-                array('type', $type)
+                array('title', $title)
             )
         ));
         
-        if(count($type) < 1)  {
+        if(count($lists) < 1)  {
             return false;
         }
         else 
